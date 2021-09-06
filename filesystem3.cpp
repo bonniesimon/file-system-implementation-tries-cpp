@@ -34,6 +34,15 @@ public:
 		
 		rmdir(sourcePath);
 	}
+
+	void symlink(string sourcePath, string destPath){
+		auto sourcePrevNode = getPrevNode(sourcePath);
+		string sourceNodeName = split(sourcePath, '/').back();
+		auto destPrevNode = getPrevNode(destPath);
+		string destNodeName = split(destPath, '/').back();
+
+		sourcePrevNode->children[sourceNodeName] = destPrevNode->children[destNodeName];
+	}
 private:
 	struct TrieNode{
 		unordered_map<string, TrieNode*> children;
@@ -101,11 +110,14 @@ int main(){
 	fs.mkdir("/bonnie");
 	fs.mkdir("/bonnie/new/cake");
 	fs.mkdir("/bonnie/newest");
-	cout << "Before moving : \n";
-	fs.ls("/bonnie/new");
-	fs.move("/bonnie/new/cake", "/bonnie/newest");
-	cout << "After moving : \n";
-	fs.ls("/bonnie/new");
+	fs.mkdir("/bonnie/newest/cake1/sheesh");
+	fs.symlink("/bonnie/new/cake", "/bonnie/newest/cake1");
+	fs.ls("/bonnie/new/cake");
+	// cout << "Before moving : \n";
+	// fs.ls("/bonnie/new");
+	// fs.move("/bonnie/new/cake", "/bonnie/newest");
+	// cout << "After moving : \n";
+	// fs.ls("/bonnie/new");
 	// fs.ls("/bonnie/newest");
 	// fs.ls("/bonnie");
 	// fs.rmdir("/bonnie/new");
